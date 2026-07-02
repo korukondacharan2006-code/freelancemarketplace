@@ -15,8 +15,13 @@ const allowedOrigins = [
   'http://127.0.0.1:5173',
   'http://localhost:5174',
   'http://127.0.0.1:5174',
-]
 
+  // Vercel Frontend
+  'https://freelancemarketplace-six.vercel.app',
+
+  // Optional: Vercel preview deployments
+  'https://freelancemarketplace-git-main-charan-projects2.vercel.app',
+]
 app.use(
   cors({
     origin: function (origin, callback) {
