@@ -25,7 +25,12 @@ async function register({ name, email, password, role }) {
     throw new AppError('Role must be client or freelancer', 400)
   }
 
-  const user = await prisma.user.create({
+let user
+
+try {
+  console.log("Before creating user...")
+
+  user = await prisma.user.create({
     data: {
       name,
       email,
@@ -33,6 +38,14 @@ async function register({ name, email, password, role }) {
       role: dbRole,
     },
   })
+
+  console.log("User created successfully:", user)
+
+} catch (error) {
+  console.error("PRISMA CREATE ERROR:")
+  console.error(error)
+  throw error
+}
 
   const token = signToken({ userId: user.id, role: user.role })
 
