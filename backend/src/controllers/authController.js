@@ -9,6 +9,7 @@ async function register(req, res, next) {
 
     created(res, result)
   } catch (err) {
+    console.error("REGISTER ERROR:", err)
     next(err)
   }
 }
@@ -21,8 +22,9 @@ async function login(req, res, next) {
 
     success(res, result)
   } catch (err) {
-    next(err)
-  }
+  console.error("LOGIN ERROR:", err)
+  next(err)
+}
 }
 
 async function getMe(req, res, next) {
