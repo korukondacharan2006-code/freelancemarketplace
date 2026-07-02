@@ -15,25 +15,21 @@ const allowedOrigins = [
   'http://127.0.0.1:5173',
   'http://localhost:5174',
   'http://127.0.0.1:5174',
-
-  // Vercel Frontend
-  'https://freelancemarketplace-six.vercel.app',
-
-  // Optional: Vercel preview deployments
-  'https://freelancemarketplace-git-main-charan-projects2.vercel.app',
 ]
+
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow Postman / server-to-server
       if (!origin) return callback(null, true)
 
-      if (allowedOrigins.includes(origin)) {
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app')
+      ) {
         return callback(null, true)
       }
 
-      // IMPORTANT: do NOT throw error, just block safely
-      return callback(null, false)
+      return callback(new Error('Not allowed by CORS'))
     },
     credentials: true,
   })
