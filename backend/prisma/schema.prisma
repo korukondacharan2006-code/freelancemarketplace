@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  FREELANCER
+  ADMIN
+}
+
+enum ProjectStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum BidStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model User {
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role     @default(CLIENT)
+  title      String?
+  bio        String?
+  skills     String[] @default([])
+  hourlyRate Float?   @map("hourly_rate")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  projects Project[] @relation("ClientProjects")
+  bids     Bid[]
+
+  @@map("users")
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  title       String
+  description String
+  budget      Float
+  status      ProjectStatus @default(OPEN)
+  category    String
+  deadline    DateTime?
+  skills      String[]      @default([])
+  clientId    String        @map("client_id")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  client User  @relation("ClientProjects", fields: [clientId], references: [id], onDelete: Cascade)
+  bids   Bid[]
+
+  @@index([clientId])
+  @@index([status])
+  @@map("projects")
+}
+
+model Bid {
+  id           String    @id @default(cuid())
+  projectId    String    @map("project_id")
+  freelancerId String    @map("freelancer_id")
+  amount       Float
+  proposal     String
+  status       BidStatus @default(PENDING)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  freelancer User    @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, freelancerId])
+  @@index([freelancerId])
+  @@map("bids")
+}
