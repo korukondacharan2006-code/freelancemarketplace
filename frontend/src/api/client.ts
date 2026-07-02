@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'https://freelancemarketplace-1-n6zg.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -14,7 +14,6 @@ api.interceptors.request.use((config) => {
 
   const url = config.url || ''
 
-  // 🚫 DO NOT SEND TOKEN FOR LOGIN / REGISTER
   const isAuthRoute =
     url.includes('/auth/login') ||
     url.includes('/auth/register')
@@ -28,7 +27,6 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// handle logout on 401
 api.interceptors.response.use(
   (res) => res,
   (err) => {
