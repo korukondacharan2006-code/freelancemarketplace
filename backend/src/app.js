@@ -12,9 +12,11 @@ const app = express()
 // Allowed Frontend Origins
 const allowedOrigins = [
   'http://localhost:5173',
-  'http://127.0.0.1:5173',
   'http://localhost:5174',
+  'http://127.0.0.1:5173',
   'http://127.0.0.1:5174',
+  'https://freelancemarketplace-six.vercel.app',
+  'https://your-other-vercel-url.vercel.app'
 ]
 
 app.use(
