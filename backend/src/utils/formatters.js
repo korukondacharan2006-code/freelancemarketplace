@@ -1,31 +1,27 @@
 const ROLES = {
   CLIENT: 'CLIENT',
   FREELANCER: 'FREELANCER',
-  ADMIN: 'ADMIN',
+  ADMIN: 'ADMIN'
 }
 
 function toApiRole(role) {
-  return role ? role.toLowerCase() : 'client'
+  if (!role) return 'client'
+  return role.toLowerCase()
 }
 
 function toDbRole(role) {
-  const r = (role || 'client').toUpperCase()
-
-  if (r === 'CLIENT') return 'CLIENT'
-  if (r === 'FREELANCER') return 'FREELANCER'
-  if (r === 'ADMIN') return 'ADMIN'
-
-  return 'CLIENT'
+  if (!role) return 'CLIENT'
+  return role.toUpperCase()
 }
 
 function formatUser(user) {
   if (!user) return null
 
-  const { password, ...safeUser } = user
+  const { password, ...rest } = user
 
   return {
-    ...safeUser,
-    role: toApiRole(safeUser.role)
+    ...rest,
+    role: toApiRole(rest.role)
   }
 }
 

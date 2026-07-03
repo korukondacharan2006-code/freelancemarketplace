@@ -1,26 +1,17 @@
-const { AppError } = require('../utils/response')
-
 function errorHandler(err, req, res, next) {
-  if (res.headersSent) {
-    return next(err)
-  }
+  console.log("ERROR:", err)
 
-  const statusCode = err.statusCode || 500
-  const message = err.isOperational ? err.message : 'Internal server error'
-
-  if (process.env.NODE_ENV !== 'production') {
-    console.error(err)
-  }
-
-  res.status(statusCode).json({
+  res.status(500).json({
     success: false,
-    message,
-    ...(process.env.NODE_ENV !== 'production' && !err.isOperational && { stack: err.stack }),
+    message: err.message || "Server error"
   })
 }
 
-function notFound(req, res, next) {
-  next(new AppError(`Route ${req.method} ${req.originalUrl} not found`, 404))
+function notFound(req, res) {
+  res.status(404).json({
+    success: false,
+    message: "Route not found"
+  })
 }
 
 module.exports = { errorHandler, notFound }
